@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RichTextEditor from "../RichTextEditor";
+import { ResumeinfoContext } from "@/context/ResumeinfoContext";
 
 const formfiled = {
   title: "",
@@ -14,6 +15,9 @@ const formfiled = {
   workSummery: "",
 };
 const Experience = () => {
+
+  const { resumeInfo, setResumeInfo } = useContext(ResumeinfoContext);
+
   const handelChange = (index, event) => {
     const newEntries = experienceList.slice();
     const { name, value } = event.target;
@@ -23,8 +27,9 @@ const Experience = () => {
 
   const [experienceList, setExperienceList] = useState([formfiled]);
   const AddNewExperience = () => {
-    setExperienceList([...experienceList, formfiled]);
+    setExperienceList([...experienceList, { ...formfiled }]);
   };
+  
 
   const RemoveExperience = () => {
     setExperienceList((experienceList) => experienceList.slice(0, -1));
@@ -37,6 +42,10 @@ const Experience = () => {
   };
   useEffect(() => {
     console.log(experienceList);
+    setResumeInfo({
+      ...resumeInfo,
+      experience: experienceList,
+    })
   }, [experienceList]);
 
   return (
@@ -95,6 +104,7 @@ const Experience = () => {
                 </div>
                 <div className="col-span-2">
                   <RichTextEditor
+                  index={index}                                                                                                                                                                                                                                                                                                         
                     OnRichTextEditorChange={(event) =>
                       handelRichTextEditor(event, "workSummery", index)
                     }
